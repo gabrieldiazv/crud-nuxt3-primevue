@@ -12,6 +12,7 @@
         <InputText class="w-full" id="username" />
         <label for="username">Username</label>
       </span>
+      
     </div>
     <template #footer>
       <Button label="Ok" icon="pi pi-check" @click="closeModal" autofocus />
