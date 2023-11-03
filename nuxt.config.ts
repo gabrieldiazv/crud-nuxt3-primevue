@@ -17,7 +17,7 @@ export default defineNuxtConfig({
     },
 
   },
-  css: ['@/assets/styles.scss',"primeicons/primeicons.css"],
+  css: ['@/assets/styles.scss', "primeicons/primeicons.css"],
   runtimeConfig: {
     public: {
       baseURL: process.env.BASE_URL || 'http://localhost:6868/api',
@@ -25,5 +25,6 @@ export default defineNuxtConfig({
   },
   plugins: [
     '~/plugins/useEmitter',
+    '~/plugins/vueLoaderOverlay',
   ]
 })

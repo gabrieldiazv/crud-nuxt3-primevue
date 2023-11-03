@@ -24,15 +24,24 @@
       <Column field="descripcion" header="Descripción"></Column>
       <Column header="Acciones" :exportable="false" style="min-width: 8rem">
         <template #body="slotProps">
-          <Button icon="pi pi-pencil" outlined rounded class="mr-2" />
+          <Button
+            @click="abrirEditar(slotProps)"
+            icon="pi pi-pencil"
+            outlined
+            rounded
+            class="mr-2"
+          />
           <Button icon="pi pi-trash" outlined rounded severity="danger" />
         </template>
       </Column>
     </DataTable>
   </div>
   <DialogProyecto
+    :esCrear="esCrear"
     :dialog="dialogProyecto"
+    :proyecto="proyecto"
     @close-modal="cerrarDialogProyecto"
+    @getAllProyect="initializerProyecto"
   />
 </template>
 
@@ -40,7 +49,27 @@
 import { ref, onMounted } from "vue";
 import { myFetch } from "../composables/myFetch";
 const proyectos = ref([]);
+const proyecto = ref({});
 const dialogProyecto = ref(false);
+const esCrear = ref(true);
+
+onMounted(async () => {
+  initializerProyecto();
+});
+
+const initializerProyecto = async () => {
+  const res = await myFetch("/proyectos", {
+    method: "GET",
+  });
+  proyectos.value = res.proyectos;
+};
+
+const abrirEditar = (item) => {
+  esCrear.value = false;
+  proyecto.value = item.data;
+  dialogProyecto.value = true;
+  console.log(proyecto.value); 
+};
 
 const abrirDialogProyecto = () => {
   dialogProyecto.value = true;
@@ -49,11 +78,4 @@ const abrirDialogProyecto = () => {
 const cerrarDialogProyecto = () => {
   dialogProyecto.value = false;
 };
-
-onMounted(async () => {
-  const res = await myFetch("/proyectos", {
-    method: "GET",
-  });
-  proyectos.value = res.proyectos;
-});
 </script>
