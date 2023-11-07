@@ -31,7 +31,7 @@
             rounded
             class="mr-2"
           />
-          <Button icon="pi pi-trash" outlined rounded severity="danger" />
+          <Button @click="abrirEliminar(slotProps)" icon="pi pi-trash" outlined rounded severity="danger" />
         </template>
       </Column>
     </DataTable>
@@ -43,6 +43,15 @@
     @close-modal="cerrarDialogProyecto"
     @getAllProyect="initializerProyecto"
   />
+  <DialogEliminar 
+    :mostrarDialog="dialogEliminar"
+    header="Eliminar"
+    message="¿Está seguro que desea eliminar el proyecto?"
+    @close-modal="cerrarDialogEliminar"
+    url="/proyectos"
+    :id="idProyecto"
+    :initialize="initializerProyecto"
+  />
 </template>
 
 <script setup>
@@ -52,6 +61,9 @@ const proyectos = ref([]);
 const proyecto = ref({});
 const dialogProyecto = ref(false);
 const esCrear = ref(true);
+const dialogEliminar = ref(false);
+const idProyecto = ref("");
+
 
 onMounted(async () => {
   initializerProyecto();
@@ -71,7 +83,19 @@ const abrirEditar = (item) => {
   console.log(proyecto.value); 
 };
 
+const abrirEliminar = (item) => {
+  console.log(item.data);
+  idProyecto.value = item.data._id;
+  dialogEliminar.value = true;
+};
+
+const cerrarDialogEliminar = () => {
+  dialogEliminar.value = false;
+};
+
 const abrirDialogProyecto = () => {
+  esCrear.value = true;
+  proyecto.value = {};
   dialogProyecto.value = true;
 };
 

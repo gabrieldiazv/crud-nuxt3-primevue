@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-const { $notification } = useNuxtApp();
+const { $notification, $loader } = useNuxtApp();
 import AppLayout from "@/layouts/AppLayout.vue";
 import { useToast } from "primevue/usetoast";
 import { useLoading } from "vue-loading-overlay";
@@ -11,15 +11,27 @@ const $loading = useLoading({
   // options
 });
 
-const submit = () => {
-  const loader = $loading.show({
-    // Optional parameters
-  });
-  // simulate AJAX
-  setTimeout(() => {
-    loader.hide();
-  }, 5000);
-};
+const load = ref(null);
+
+$loader.$on("show", (esMostrar) => {
+  if (esMostrar) {
+    load.value = $loading.show({
+      container: null,
+      canCancel: false,
+      color: "#000000",
+      backgroundColor: "#ffffff",
+      loader: "spinner",
+      width: 100,
+      height: 100,
+      opacity: 0.5,
+      zIndex: 999,
+    });
+    return;
+  }
+  if (load.value == null) return;
+  load.value.hide();
+  load.value = null;
+});
 
 $notification.$on("toast", ({ severity, summary, detail }) => {
   toast.add({
@@ -34,5 +46,4 @@ $notification.$on("toast", ({ severity, summary, detail }) => {
 <template>
   <app-layout></app-layout>
   <Toast />
-  <Button @click="submit"/>
 </template>
