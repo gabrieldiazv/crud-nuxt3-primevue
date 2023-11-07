@@ -5,7 +5,13 @@
       tableStyle="min-width: 50rem"
       dataKey="_id"
       :paginator="true"
-      :rows="10"
+      :lazy="true"
+      :rows="5"
+      @page="onPage($event)"
+      :totalRecords="totalRecords"
+      :rowsPerPageOptions="[5, 10, 20, 50]"
+      paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
+      currentPageReportTemplate="{first} to {last} de {totalRecords}"
     >
       <template #header>
         <div class="flex justify-between">
@@ -25,13 +31,19 @@
       <Column header="Acciones" :exportable="false" style="min-width: 8rem">
         <template #body="slotProps">
           <Button
-            @click="abrirEditar(slotProps)"
+            @click="abrirEditar(slotProps.data)"
             icon="pi pi-pencil"
             outlined
             rounded
             class="mr-2"
           />
-          <Button @click="abrirEliminar(slotProps)" icon="pi pi-trash" outlined rounded severity="danger" />
+          <Button
+            @click="abrirEliminar(slotProps.data._id)"
+            icon="pi pi-trash"
+            outlined
+            rounded
+            severity="danger"
+          />
         </template>
       </Column>
     </DataTable>
@@ -43,7 +55,7 @@
     @close-modal="cerrarDialogProyecto"
     @getAllProyect="initializerProyecto"
   />
-  <DialogEliminar 
+  <DialogEliminar
     :mostrarDialog="dialogEliminar"
     header="Eliminar"
     message="¿Está seguro que desea eliminar el proyecto?"
@@ -56,50 +68,52 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { myFetch } from "../composables/myFetch";
-const proyectos = ref([]);
-const proyecto = ref({});
-const dialogProyecto = ref(false);
-const esCrear = ref(true);
-const dialogEliminar = ref(false);
-const idProyecto = ref("");
+import { dialogoEliminar, dialogoCrud, myFetch } from "../composables";
 
+const {
+  dialogEliminar,
+  idEliminar: idProyecto,
+  abrirEliminar,
+  cerrarDialogEliminar,
+} = dialogoEliminar();
+
+const {
+  arrayObj: proyectos,
+  objeto: proyecto,
+  dialog: dialogProyecto,
+  esCrear,
+  abrirEditar,
+  abrirDialog: abrirDialogProyecto,
+  cerrarDialog: cerrarDialogProyecto,
+} = dialogoCrud();
+
+const totalRecords = ref(0);
+const options = ref({
+  limite: 5,
+  desde: 0,
+});
 
 onMounted(async () => {
   initializerProyecto();
 });
 
 const initializerProyecto = async () => {
-  const res = await myFetch("/proyectos", {
-    method: "GET",
-  });
+  const res = await myFetch(
+    `/proyectos?desde=${options.value.desde}&limite=${options.value.limite}`,
+    {
+      method: "GET",
+    }
+  );
+  console.log(res);
   proyectos.value = res.proyectos;
+  totalRecords.value = res.total;
+  console.log(typeof totalRecords.value);
 };
 
-const abrirEditar = (item) => {
-  esCrear.value = false;
-  proyecto.value = item.data;
-  dialogProyecto.value = true;
-  console.log(proyecto.value); 
-};
-
-const abrirEliminar = (item) => {
-  console.log(item.data);
-  idProyecto.value = item.data._id;
-  dialogEliminar.value = true;
-};
-
-const cerrarDialogEliminar = () => {
-  dialogEliminar.value = false;
-};
-
-const abrirDialogProyecto = () => {
-  esCrear.value = true;
-  proyecto.value = {};
-  dialogProyecto.value = true;
-};
-
-const cerrarDialogProyecto = () => {
-  dialogProyecto.value = false;
+const onPage = ($event) => {
+  console.log($event);
+  options.value.desde = $event.first;
+  options.value.limite = $event.rows;
+  initializerProyecto();
 };
 </script>
