@@ -13,7 +13,8 @@ export default defineNuxtConfig({
     importPT: undefined,
     cssLayerOrder: 'tailwind-base, primevue, tailwind-utilities',
     components: {
-      include: '*'
+      include: '*',
+      exclude: ['Editor', 'Chart']
     },
 
   },

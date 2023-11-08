@@ -13,9 +13,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
     unbindOutsideClickListener();
 });
-const logoUrl = computed(() => {
-    return `/layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
-});
+
 
 const onTopBarMenuButton = () => {
     topbarMenuActive.value = !topbarMenuActive.value;
@@ -63,7 +61,7 @@ const isOutsideClicked = (event) => {
 <template>
     <div class="layout-topbar">
         <router-link to="/" class="layout-topbar-logo">
-            <img src="logo.png" alt="logo" />
+            <img src="../public/logo.png" alt="logo" />
             <span>FAENA</span>
         </router-link>
 
