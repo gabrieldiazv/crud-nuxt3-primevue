@@ -1,6 +1,6 @@
 import { ref, onMounted, watch } from "vue";
 import { myFetch } from "./myFetch";
-export const useDataTable = async () => {
+export const useData = async (urlData, respuestaData) => {
   const arrayObj = ref([]);
   const totalRecords = ref(0);
   const buscar = ref("");
@@ -19,10 +19,7 @@ export const useDataTable = async () => {
   const setTimeoutSearch = ref(null);
 
   onMounted(async () => {
-    console.log(arrayObj.value);
-    console.log("useDataTable");
     await initializer();
-    console.log(arrayObj.value);
   });
 
   watch(buscar, (value) => {
@@ -46,7 +43,7 @@ export const useDataTable = async () => {
     sortField = "",
     sortOrder = -1
   ) => {
-    const url = `/proyectos?desde=${options.value.desde}&limite=${options.value.limite}`;
+    const url = `/${urlData}?desde=${options.value.desde}&limite=${options.value.limite}`;
     let res;
 
     if (esSort) {
@@ -61,7 +58,7 @@ export const useDataTable = async () => {
       });
     }
     // console.log(res);
-    arrayObj.value = res.proyectos;
+    arrayObj.value = res[respuestaData];
     totalRecords.value = res.total;
   };
 
@@ -84,16 +81,19 @@ export const useDataTable = async () => {
   };
 
   const buscarCampo = async (campo) => {
-    const url = `/proyectos/searchBy?desde=${optionsSearchBy.value.desde}&limite=${optionsSearchBy.value.limite}&search=${campo}`;
+    const url = `/${urlData}/searchBy?desde=${optionsSearchBy.value.desde}&limite=${optionsSearchBy.value.limite}&search=${campo}`;
     const res = await myFetch(url, {
       method: "GET",
     });
     // console.log(res);
-    arrayObj.value = res.proyectos;
+    arrayObj.value = res[respuestaData];
     totalRecords.value = res.total;
   };
 
+  // console.log(arrayObj.value);
+
   return {
+    arrayObj,
     initializer,
     totalRecords,
     buscar,

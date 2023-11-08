@@ -80,10 +80,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from "vue";
 import { useDialogoEliminar } from "../composables/useDialogoEliminar";
 import { useDialogoCrud } from "../composables/useDialogoCrud";
-import { myFetch } from "../composables/myFetch";
+import { useData } from "../composables/useData";
 
 const {
   dialogEliminar,
@@ -94,6 +93,16 @@ const {
 
 const {
   arrayObj: proyectos,
+  initializer: initializerProyecto,
+  totalRecords,
+  buscar,
+  rows,
+  loading,
+  onPage,
+  onSort,
+} = await useData("proyectos", "proyectos");
+
+const {
   objeto: proyecto,
   dialog: dialogProyecto,
   esCrear,
@@ -101,94 +110,6 @@ const {
   abrirDialog: abrirDialogProyecto,
   cerrarDialog: cerrarDialogProyecto,
 } = useDialogoCrud();
-
-const totalRecords = ref(0);
-const buscar = ref("");
-const rows = ref(5);
-const loading = ref(false);
-const options = ref({
-  limite: 5,
-  desde: 0,
-});
-
-const optionsSearchBy = ref({
-  limite: 5,
-  desde: 0,
-});
-
-const setTimeoutSearch = ref(null);
-
-onMounted(async () => {
-  initializerProyecto();
-});
-
-watch(buscar, (value) => {
-  optionsSearchBy.value.desde = 0;
-  optionsSearchBy.value.limite = rows.value;
-
-  clearTimeout(setTimeoutSearch.value);
-  loading.value = true;
-  setTimeoutSearch.value = setTimeout(() => {
-    if (value.trim().length > 0) {
-      buscarCampo(value);
-    } else {
-      initializerProyecto();
-    }
-    loading.value = false;
-  }, 1500);
-});
-
-const initializerProyecto = async (
-  esSort = false,
-  sortField = "",
-  sortOrder = -1
-) => {
-  const url = `/proyectos?desde=${options.value.desde}&limite=${options.value.limite}`;
-  let res;
-
-  if (esSort) {
-    res = await myFetch(`${url}&campo${sortField}&orden${sortOrder}`, {
-      method: "GET",
-    });
-  }
-
-  if (!esSort) {
-    res = await myFetch(url, {
-      method: "GET",
-    });
-  }
-  // console.log(res);
-  proyectos.value = res.proyectos;
-  totalRecords.value = res.total;
-};
-
-const onPage = ($event) => {
-  if (buscar.value.trim().length > 0) {
-    optionsSearchBy.value.desde = $event.first;
-    optionsSearchBy.value.limite = $event.rows;
-    rows.value = $event.rows;
-    buscarCampo(buscar.value);
-    return;
-  }
-  options.value.desde = $event.first;
-  options.value.limite = $event.rows;
-  rows.value = $event.rows;
-  initializerProyecto();
-};
-
-const onSort = ($event) => {
-  initializerProyecto(true, $event.sortField, $event.sortOrder);
-};
-
-const buscarCampo = async (campo) => {
-  const url = `/proyectos/searchBy?desde=${optionsSearchBy.value.desde}&limite=${optionsSearchBy.value.limite}&search=${campo}`;
-  const res = await myFetch(url, {
-    method: "GET",
-  });
-  // console.log(res);
-  proyectos.value = res.proyectos;
-  totalRecords.value = res.total;
-};
 </script>
 <style>
 .p-component-overlay {
