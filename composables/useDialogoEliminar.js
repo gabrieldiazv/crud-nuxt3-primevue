@@ -1,6 +1,6 @@
 import { ref } from "vue";
 
-export const dialogoEliminar = () => {
+export const useDialogoEliminar = () => {
   const dialogEliminar = ref(false);
   const idEliminar = ref("");
 

@@ -1,6 +1,6 @@
 import { ref } from "vue";
 
-export const dialogoCrud = () => {
+export const useDialogoCrud = () => {
   const arrayObj = ref([]);
   const objeto = ref({});
   const dialog = ref(false);

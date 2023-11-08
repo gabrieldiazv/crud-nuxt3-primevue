@@ -81,8 +81,8 @@
 
 <script setup>
 import { ref, onMounted, watch } from "vue";
-import { dialogoEliminar } from "../composables/dialogoEliminar";
-import { dialogoCrud } from "../composables/dialogoCrud";
+import { useDialogoEliminar } from "../composables/useDialogoEliminar";
+import { useDialogoCrud } from "../composables/useDialogoCrud";
 import { myFetch } from "../composables/myFetch";
 
 const {
@@ -90,7 +90,7 @@ const {
   idEliminar: idProyecto,
   abrirEliminar,
   cerrarDialogEliminar,
-} = dialogoEliminar();
+} = useDialogoEliminar();
 
 const {
   arrayObj: proyectos,
@@ -100,7 +100,7 @@ const {
   abrirEditar,
   abrirDialog: abrirDialogProyecto,
   cerrarDialog: cerrarDialogProyecto,
-} = dialogoCrud();
+} = useDialogoCrud();
 
 const totalRecords = ref(0);
 const buscar = ref("");
