@@ -1,6 +1,8 @@
 <script setup>
 definePageMeta({
-  layout: "blank",
+  layout: 'blank',
+  title: 'Login',
+  middleware: 'auth'
 });
 
 import { ref } from "vue";

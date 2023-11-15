@@ -6,10 +6,11 @@ export const useUserStore = defineStore("user", {
     user: {},
     isLoggedIn: false,
     api_token: "",
+    tiempoExpiracion: 0,
   }),
   actions: {
     async login(nickname, password) {
-      const { token, usuario } = await myFetch("/auth/login", {
+      const { token, usuario, tiempoExpiracion } = await myFetch("/auth/login", {
         method: "POST",
         body: { nickname: nickname, password: password },
       });
@@ -18,6 +19,7 @@ export const useUserStore = defineStore("user", {
       this.$state.id = usuario._id;
       this.$state.user = usuario;
       this.$state.api_token = token;
+      this.$state.tiempoExpiracion = tiempoExpiracion;
       this.$state.isLoggedIn = true;
     },
 
@@ -26,7 +28,7 @@ export const useUserStore = defineStore("user", {
         full_name: name,
         email: email,
         password: password,
-        password_confirmation: confirmPassword,
+        password_confirmation: confirmPassword
       });
     },
 
@@ -44,9 +46,11 @@ export const useUserStore = defineStore("user", {
     },
 
     resetState() {
+      console.log('reset state');
       this.$state.id = "";
       this.$state.user = {};
       this.$state.api_token = "";
+      this.$state.tiempoExpiracion = 0;
       this.$state.isLoggedIn = false;
     },
   },

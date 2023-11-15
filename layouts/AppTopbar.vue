@@ -6,6 +6,15 @@ const { layoutConfig, onMenuToggle } = useLayout();
 const outsideClickListener = ref(null);
 const topbarMenuActive = ref(false);
 const router = useRouter();
+import { useUserStore } from "../stores/user";
+
+const userStore = useUserStore();
+
+// logout
+const logout = async () => {
+    await userStore.logout();
+    router.push('/login');
+};
 
 onMounted(() => {
     bindOutsideClickListener();
@@ -21,7 +30,7 @@ const onTopBarMenuButton = () => {
 
 const onSettingsClick = () => {
     topbarMenuActive.value = false;
-    router.push('/utilities/documentation');
+    router.push('/login');
 };
 
 const topbarMenuClasses = computed(() => {
@@ -82,7 +91,7 @@ const isOutsideClicked = (event) => {
                 <i class="pi pi-user"></i>
                 <span>Profile</span>
             </button>
-            <button @click="onSettingsClick()" class="p-link layout-topbar-button">
+            <button @click="logout()" class="p-link layout-topbar-button">
                 <i class="pi pi-cog"></i>
                 <span>Settings</span>
             </button>

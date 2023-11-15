@@ -6,6 +6,7 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     "@pinia/nuxt",
     "@pinia-plugin-persistedstate/nuxt",
+    'dayjs-nuxt',
   ],
   primevue: {
     usePrimeVue: true,
@@ -27,5 +28,12 @@ export default defineNuxtConfig({
   plugins: [
     '~/plugins/useEmitter',
     '~/plugins/vueLoaderOverlay',
-  ]
+  ],
+  dayjs: {
+    locales: ['es','en'],
+    plugins: ['relativeTime', 'utc', 'timezone','isBetween'],
+    defaultLocale: 'es',
+    // defaultTimezone santiago de chile 
+    defaultTimezone: 'America/Santiago',
+  }
 })

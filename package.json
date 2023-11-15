@@ -14,6 +14,7 @@
   "devDependencies": {
     "@nuxt/devtools": "latest",
     "@nuxtjs/tailwindcss": "^6.8.1",
+    "dayjs-nuxt": "^2.1.9",
     "nuxt": "^3.8.0",
     "nuxt-primevue": "^0.1.0",
     "sass": "^1.69.5",

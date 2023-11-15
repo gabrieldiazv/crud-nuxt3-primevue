@@ -14,7 +14,7 @@
     <DataTable
       @sort="onSort($event)"
       :loading="loading"
-      :value="proyectos"
+      :value="usuarios"
       tableStyle="min-width: 50rem"
       dataKey="_id"
       :paginator="true"
@@ -55,8 +55,8 @@
           />
           <p>Cargando, espere por favor…</p>
           <!-- <p>
-            <Button label="Cancel" @click="cancelLoading" />
-          </p> -->
+              <Button label="Cancel" @click="cancelLoading" />
+            </p> -->
         </div>
       </template>
     </DataTable>
@@ -64,50 +64,51 @@
   <DialogProyecto
     :esCrear="esCrear"
     :dialog="dialogProyecto"
-    :proyecto="proyecto"
+    :proyecto="usuario"
     @close-modal="cerrarDialogProyecto"
-    @getAllProyect="initializerProyecto"
+    @getAllProyect="initializerUsuarios"
   />
   <DialogEliminar
     :mostrarDialog="dialogEliminar"
     header="Eliminar"
-    message="¿Está seguro que desea eliminar el proyecto?"
+    message="¿Está seguro que desea eliminar el usuario?"
     @close-modal="cerrarDialogEliminar"
-    url="/proyectos"
-    :id="idProyecto"
-    :initialize="initializerProyecto"
+    url="/usuarios"
+    :id="idUsuario"
+    :initialize="initializerUsuarios"
   />
 </template>
 
 <script setup>
 definePageMeta({
-  title: "proyectos",
+  title: "usuarios",
   middleware: "auth",
 });
+
 import { useDialogoEliminar } from "../composables/useDialogoEliminar";
 import { useDialogoCrud } from "../composables/useDialogoCrud";
 import { useData } from "../composables/useData";
 
 const {
   dialogEliminar,
-  idEliminar: idProyecto,
+  idEliminar: idUsuario,
   abrirEliminar,
   cerrarDialogEliminar,
 } = useDialogoEliminar();
 
 const {
-  arrayObj: proyectos,
-  initializer: initializerProyecto,
+  arrayObj: usuarios,
+  initializer: initializerUsuarios,
   totalRecords,
   buscar,
   rows,
   loading,
   onPage,
   onSort,
-} = await useData("proyectos", "proyectos");
+} = await useData("usuarios", "usuarios");
 
 const {
-  objeto: proyecto,
+  objeto: usuario,
   dialog: dialogProyecto,
   esCrear,
   abrirEditar,

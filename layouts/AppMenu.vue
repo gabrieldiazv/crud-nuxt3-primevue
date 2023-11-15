@@ -2,10 +2,10 @@
 import { ref } from 'vue';
 import AppMenuItem from './AppMenuItem.vue';
 const model = ref([
-    // {
-    //     label: 'Home',
-    //     items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' }]
-    // },
+    {
+        label: 'Home',
+        items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' }]
+    },
     // {
     //     label: 'UI Components',
     //     items: [
