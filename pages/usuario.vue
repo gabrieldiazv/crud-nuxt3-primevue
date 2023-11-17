@@ -6,7 +6,7 @@
         <InputText placeholder="Buscar" v-model="buscar" />
       </span>
       <Button
-        @click="abrirDialogProyecto"
+        @click="abrirDialogUsuario"
         class="primary"
         label="Crear Proyectos"
       />
@@ -61,11 +61,11 @@
       </template>
     </DataTable>
   </div>
-  <DialogProyecto
+  <DialogUsuarios
     :esCrear="esCrear"
-    :dialog="dialogProyecto"
-    :proyecto="usuario"
-    @close-modal="cerrarDialogProyecto"
+    :dialog="dialogUsuario"
+    :usuario="usuario"
+    @close-modal="cerrarDialogUsuario"
     @getAllProyect="initializerUsuarios"
   />
   <DialogEliminar
@@ -109,11 +109,11 @@ const {
 
 const {
   objeto: usuario,
-  dialog: dialogProyecto,
+  dialog: dialogUsuario,
   esCrear,
   abrirEditar,
-  abrirDialog: abrirDialogProyecto,
-  cerrarDialog: cerrarDialogProyecto,
+  abrirDialog: abrirDialogUsuario,
+  cerrarDialog: cerrarDialogUsuario,
 } = useDialogoCrud();
 </script>
 <style>

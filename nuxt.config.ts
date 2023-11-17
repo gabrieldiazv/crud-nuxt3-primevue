@@ -7,6 +7,7 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@pinia-plugin-persistedstate/nuxt",
     'dayjs-nuxt',
+    '@vee-validate/nuxt',
   ],
   primevue: {
     usePrimeVue: true,
@@ -35,5 +36,16 @@ export default defineNuxtConfig({
     defaultLocale: 'es',
     // defaultTimezone santiago de chile 
     defaultTimezone: 'America/Santiago',
-  }
+  },
+  veeValidate: {
+    // disable or enable auto imports
+    autoImports: true,
+    // Use different names for components
+    componentNames: {
+      Form: 'VeeForm',
+      Field: 'VeeField',
+      FieldArray: 'VeeFieldArray',
+      ErrorMessage: 'VeeErrorMessage',
+    },
+  },
 })
