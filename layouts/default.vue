@@ -14,6 +14,7 @@ const $loading = useLoading({
 const load = ref(null);
 
 $loader.$on("show", (esMostrar) => {
+  console.log('esMostrar', esMostrar)
   if (esMostrar) {
     load.value = $loading.show({
       container: null,
@@ -24,7 +25,7 @@ $loader.$on("show", (esMostrar) => {
       width: 100,
       height: 100,
       opacity: 0.5,
-      zIndex: 999,
+      zIndex: 1000000,
     });
     return;
   }

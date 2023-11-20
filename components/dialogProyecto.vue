@@ -87,11 +87,13 @@ const editarProyecto = async () => {
       summary: "Proyecto editado",
       detail: "El proyecto se ha editado correctamente",
     });
+
     $loader.$emit("show", false);
     closeModal();
     getAllProyect();
     nombre.value = "";
     descripcion.value = "";
+
     // console.log(res);
   } catch (error) {
     // console.log(error);

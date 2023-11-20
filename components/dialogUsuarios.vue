@@ -65,7 +65,7 @@
             }}</small>
           </div>
         </div>
-        <div class="field col-12 md:col-6">
+        <div v-if="props.esCrear" class="field col-12 md:col-6">
           <div class="flex flex-column gap-2">
             <label for="password">Password</label>
             <InputText
@@ -98,6 +98,7 @@
           </div>
         </div>
       </div>
+
       <!-- <pre>meta: {{ meta }}</pre>
     <pre>errors: {{ errors }}</pre>
     <pre>values: {{ values }}</pre>
@@ -147,21 +148,11 @@ const roles = ref([
 
 const proyectos = ref([]);
 
-
-
 const closeModal = () => emit("closeModal");
 const getAllProyect = () => emit("getAllProyect");
-const {
-  values,
-  meta,
-  errors,
-  resetForm,
-  setErrors,
-  handleSubmit,
-  setFieldValue,
-  defineComponentBinds
-} = useForm({
-  validationSchema: toTypedSchema(
+
+const schema = ref(
+  toTypedSchema(
     yup.object({
       nickname: yup.string().required(),
       nombre: yup.string().required(),
@@ -172,7 +163,20 @@ const {
       proyecto: yup.string().required(),
     })
   )
-})
+);
+
+const {
+  values,
+  meta,
+  errors,
+  resetForm,
+  setErrors,
+  handleSubmit,
+  setFieldValue,
+  defineComponentBinds,
+} = useForm({
+  validationSchema: schema.value,
+});
 
 const nickname = defineComponentBinds("nickname");
 const nombre = defineComponentBinds("nombre");
@@ -182,11 +186,23 @@ const password = defineComponentBinds("password");
 const rol = defineComponentBinds("rol");
 const proyecto = defineComponentBinds("proyecto");
 
-
 watch(
   () => props.usuario,
   (value, oldValue) => {
+    if (!props.esCrear) {
+      console.log(value);
+      setFieldValue("nickname", value.nickname);
+      setFieldValue("nombre", value.nombre);
+      setFieldValue("apellido", value.apellido);
+      setFieldValue("correo", value.correo);
+      setFieldValue("password", "12345678");
+      setFieldValue("rol", value.rol);
+      setFieldValue("proyecto", value.idProyecto._id);
 
+      return;
+    }
+
+    resetForm();
   },
   { deep: true }
 );
@@ -201,6 +217,7 @@ const onSubmit = handleSubmit((values) => {
     crearUsuario(body);
     return;
   }
+  delete body.password;
   editarUsuario(body);
 });
 
@@ -217,21 +234,19 @@ const getAllProyectos = async () => {
   }
 };
 
-const editarUsuario = async () => {
+const editarUsuario = async (body) => {
   try {
     $loader.$emit("show", true);
-    const res = await myFetch(`/usuarios/${idusuario.value}`, {
+    const res = await myFetch(`/usuarios/${props.usuario._id}`, {
       method: "PUT",
-      body: {
-        nombre: nombre.value,
-        descripcion: descripcion.value,
-      },
+      body,
     });
     $notification.$emit("toast", {
       severity: "success",
       summary: "usuario editado",
       detail: "El usuario se ha editado correctamente",
     });
+
     $loader.$emit("show", false);
     closeModal();
     getAllProyect();

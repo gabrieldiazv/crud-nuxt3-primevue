@@ -46,18 +46,19 @@ export const useData = async (urlData, respuestaData) => {
     const url = `/${urlData}?desde=${options.value.desde}&limite=${options.value.limite}`;
     let res;
 
-    if (esSort) {
-      res = await myFetch(`${url}&campo${sortField}&orden${sortOrder}`, {
+    if (esSort) {      console.log('aqui')
+      res = await myFetch(`${url}&campo=${sortField}&orden=${sortOrder}`, {
         method: "GET",
       });
     }
 
     if (!esSort) {
+      console.log('aqui2')
       res = await myFetch(url, {
         method: "GET",
       });
     }
-    // console.log(res);
+    console.log(res);
     arrayObj.value = res[respuestaData];
     totalRecords.value = res.total;
   };
@@ -78,6 +79,7 @@ export const useData = async (urlData, respuestaData) => {
 
   const onSort = ($event) => {
     initializer(true, $event.sortField, $event.sortOrder);
+    console.log($event.sortField, $event.sortOrder)
   };
 
   const buscarCampo = async (campo) => {

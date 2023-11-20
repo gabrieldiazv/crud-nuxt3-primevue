@@ -26,8 +26,11 @@
       paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
       currentPageReportTemplate="{first} al {last} de {totalRecords}"
     >
+      <Column field="nickname" sortable header="Nickname"></Column>
       <Column field="nombre" sortable header="Nombre"></Column>
-      <Column field="descripcion" header="Descripción"></Column>
+      <Column field="apellido" sortable header="Apellido"></Column>
+      <Column field="rol" sortable header="Rol"></Column>
+      <Column field="correo" sortable header="Correo"></Column>
       <Column header="Acciones" :exportable="false" style="min-width: 8rem">
         <template #body="slotProps">
           <Button
