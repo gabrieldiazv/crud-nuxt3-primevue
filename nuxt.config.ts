@@ -29,6 +29,7 @@ export default defineNuxtConfig({
   plugins: [
     '~/plugins/useEmitter',
     '~/plugins/vueLoaderOverlay',
+    '~/plugins/configYup',
   ],
   dayjs: {
     locales: ['es','en'],
@@ -47,5 +48,7 @@ export default defineNuxtConfig({
       FieldArray: 'VeeFieldArray',
       ErrorMessage: 'VeeErrorMessage',
     },
+
+
   },
 })

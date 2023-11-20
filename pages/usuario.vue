@@ -8,7 +8,7 @@
       <Button
         @click="abrirDialogUsuario"
         class="primary"
-        label="Crear Proyectos"
+        label="Crear Usuario"
       />
     </div>
     <DataTable
