@@ -1,17 +1,47 @@
 <script setup>
 definePageMeta({
-  layout: 'blank',
-  title: 'Login',
-  middleware: 'auth'
+  layout: "blank",
+  title: "Login",
+  middleware: "auth",
 });
 
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useUserStore } from "../stores/user";
+import isOnline from "../helpers/isOnline";
 const { $notification } = useNuxtApp();
 const router = useRouter();
 const userStore = useUserStore();
+
 const password = ref("");
 const nickname = ref("");
+
+onMounted(async () => {
+  await verificarToken();
+});
+
+const verificarToken = async () => {
+  const tieneInternet = isOnline();
+  if (tieneInternet) {
+    try {
+      console.log(tieneInternet);
+      await userStore.verificarToken();
+      const user = userStore.user;
+      console.log(user);
+      if (user.rol == "ADMINISTRADOR") {
+        router.push("/trabajadores");
+        return;
+      }
+
+      if (user.rol == "SUPER-ADMIN") {
+        router.push("/");
+        return;
+      }
+      router.push("/");
+    } catch (error) {
+      console.log(error);
+    }
+  }
+};
 
 const login = async () => {
   console.log("login");

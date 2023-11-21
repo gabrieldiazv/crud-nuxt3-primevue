@@ -16,6 +16,8 @@ export const useUserStore = defineStore("user", {
       });
 
       localStorage.setItem("token", token);
+      localStorage.setItem("usuario", usuario);
+      localStorage.setItem("tiempoExpiracion", tiempoExpiracion);
       this.$state.id = usuario._id;
       this.$state.user = usuario;
       this.$state.api_token = token;
@@ -40,6 +42,31 @@ export const useUserStore = defineStore("user", {
       this.$state.isLoggedIn = true;
     },
 
+    async verificarToken() {
+      const token = localStorage.getItem("token");
+      const config = useRuntimeConfig();
+      const headers = {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: token ? `Bearer ${token}` : "",
+      }
+      const {usuario, token:tk, tiempoExpiracion} = await $fetch("/auth/refresh", {
+        method: "POST",
+        baseURL: config.public.baseURL,
+        headers,
+      })
+
+      localStorage.setItem("token", tk);
+      localStorage.setItem("usuario", usuario);
+      localStorage.setItem("tiempoExpiracion", tiempoExpiracion);
+      this.$state.id = usuario._id;
+      this.$state.user = usuario;
+      this.$state.api_token = tk;
+      this.$state.tiempoExpiracion = tiempoExpiracion;
+      this.$state.isLoggedIn = true;
+      
+    },
+
     async logout() {
       // await $axios.post('/api/logout')
       this.resetState();
@@ -47,6 +74,7 @@ export const useUserStore = defineStore("user", {
 
     resetState() {
       console.log('reset state');
+      localStorage.removeItem("token");
       this.$state.id = "";
       this.$state.user = {};
       this.$state.api_token = "";
