@@ -1,11 +1,18 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onUnmounted } from "vue";
 const { $notification, $loader } = useNuxtApp();
 import AppLayout from "@/layouts/AppLayout.vue";
 import { useToast } from "primevue/usetoast";
 import { useLoading } from "vue-loading-overlay";
 
 const toast = useToast();
+
+// desmontar
+onUnmounted(() => {
+  // $loader.$off("show");
+  // $notification.$off("toast");
+});
+
 
 const $loading = useLoading({
   // options
@@ -41,6 +48,9 @@ $notification.$on("toast", ({ severity, summary, detail }) => {
     detail: detail,
     life: 3000,
   });
+  setTimeout(() => {
+    toast.remove({ severity: "success" });
+  }, 3000);
 });
 </script>
 
